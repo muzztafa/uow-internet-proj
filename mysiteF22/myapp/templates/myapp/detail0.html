@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Online Store APP</title>
+</head>
+
+{#    # response.write('<p> Detail Page </p>')#}
+{#    # response.write('<p> Warehouse Location: '+category.warehouse+ ' </p>')#}
+{#    # for product in prod_list:#}
+{#    #     para = '<p>' + str(product.name) + ': ' + str(product.price) + '</p>'#}
+{#    #     response.write(para)#}
+
+<body>
+    <p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+    <h2>Detail Page</h2>
+    {% if category %}
+        <p>Warehouse Location {{ category.warehouse }}</p>
+    {% endif %}
+    {% if productList %}
+        <ol>
+            {% for product in productList %}
+                <li> {{ product.name }}: {{ product.price }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <strong>There are no available products!</strong>
+    {% endif %}
+
+</body>
+</html>

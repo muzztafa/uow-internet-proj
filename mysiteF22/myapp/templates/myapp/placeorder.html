@@ -1,0 +1,44 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Welcome Farhan!{% endblock %}
+{% block myhdg %}Hello Farhan {% endblock %}
+{% block body_block %}<p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+
+
+    <h2>Place Order</h2>
+
+    {% if prodlist %}
+
+        <ol>
+
+            {% for product in prodlist %}
+
+                <li> {{ product.name }}: ${{ product.price }} - In Stock: {{ product.stock }}</li>
+
+            {% endfor %}
+
+        </ol>
+
+    {% else %}
+
+        <strong>There are no available products!</strong>
+
+    {% endif %}
+
+
+{#    {{ form.as_p }}#}
+
+    <form action="/myapp/placeorder/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit" />
+    </form>
+
+
+    <p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+
+{% endblock %}
+
+
+{#This template should display#}
+{#the list of products and render the form you created in place_order view. Also, create the#}
+{#order_response.html to display the message msg#}

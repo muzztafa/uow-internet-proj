@@ -1,0 +1,40 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Welcome Farhan!{% endblock %}
+{% block myhdg %}Hello Farhan {% endblock %}
+{% block body_block %}<p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+
+
+    <h2>My Orders</h2>
+
+    {% if isClient == True %}
+
+           {% if orderList %}
+
+            <ol>
+
+                {% for order in orderList %}
+                   <li>
+                       <p>Product: {{ order.product }}</p>
+                    <p>Client: {{ order.client }}</p>
+                    <p>Ordered Quantity: {{ order.num_units }}</p>
+                    <p>Status: {{ order.order_status }}</p>
+                    <p>Date: {{ order.status_date }}</p>
+                    </li>
+
+                {% endfor %}
+
+            </ol>
+
+        {% else %}
+
+            <strong>You dont have any orders!</strong>
+
+        {% endif %}
+
+
+    {% else %}
+        <strong>You are not a registered client!</strong>
+    {% endif %}
+
+
+{% endblock %}

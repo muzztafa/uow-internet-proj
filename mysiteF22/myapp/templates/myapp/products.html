@@ -1,0 +1,28 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Welcome Farhan!{% endblock %}
+{% block myhdg %}Hello Farhan {% endblock %}
+{% block body_block %}<p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+
+
+    <h2>Product Page</h2>
+
+    {% if prodlist %}
+
+        <ol>
+
+            {% for product in prodlist %}
+                <a href="{% url 'myapp:product_detail' product.id %}"><li>{{ product.name }}: ${{ product.price }} - In Stock: {{ product.stock }}</li></a>
+
+            {% endfor %}
+
+        </ol>
+
+    {% else %}
+
+        <strong>There are no available products!</strong>
+
+    {% endif %}
+
+    <p><a href="{% url 'myapp:placeorder' %}">Place Order</a></p>
+
+{% endblock %}
