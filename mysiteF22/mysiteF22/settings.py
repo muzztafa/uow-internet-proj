@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 #Session expiry
-SESSION_COOKIE_AGE = 10
+SESSION_COOKIE_AGE = 3600
 
 ROOT_URLCONF = 'mysiteF22.urls'
 
