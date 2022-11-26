@@ -130,3 +130,17 @@ def myorders(request):
         isClient = False
 
     return render(request, 'myapp/myorders.html', {"isClient": isClient, "orderList":orders})
+
+
+# def user_register(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         first_name
+#         last_name
+#         email
+#         company
+#         shipping_address
+#         city
+#         province
+#         interested_in

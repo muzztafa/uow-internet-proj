@@ -45,3 +45,18 @@ class LoginForm(forms.ModelForm):
         # }
     # username = forms.CharField(required=True)
     # password = forms.PasswordInput(required=True)
+
+
+class RegisterForm(forms.ModelForm):
+    class Meta:
+        models = User
+        fields = ['username', 'password']
+
+        # first_name
+        # last_name
+        # email
+        # company
+        # shipping_address
+        # city
+        # province
+        # interested_in
