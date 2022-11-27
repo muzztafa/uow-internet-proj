@@ -1,5 +1,7 @@
 from django import forms
-from myapp.models import Order, User
+from django.contrib.auth.forms import UserCreationForm
+from django.forms import PasswordInput, EmailInput
+from myapp.models import Order, User,Client,Category
 
 
 class OrderForm(forms.ModelForm):
@@ -47,16 +49,18 @@ class LoginForm(forms.ModelForm):
     # password = forms.PasswordInput(required=True)
 
 
-class RegisterForm(forms.ModelForm):
-    class Meta:
-        models = User
-        fields = ['username', 'password']
+#Task 3 creating a registration form.
+class RegisterForm(UserCreationForm):
+    PROVINCE_CHOICES = [
+        ('AB', 'Alberta'),
+        ('MB', 'Manitoba'),
+        ('ON', 'Ontario'),
+        ('QC', 'Quebec'), ]
 
-        # first_name
-        # last_name
-        # email
-        # company
-        # shipping_address
-        # city
-        # province
-        # interested_in
+    email = forms.EmailField(required=True)
+    interested_in = forms.ModelMultipleChoiceField(required=True, queryset=Category.objects.all())
+    city = forms.CharField(required=True)
+    province = forms.ChoiceField(required=True, choices=PROVINCE_CHOICES)
+    class Meta:
+        model = Client
+        fields = ("username", "email", "password1", "password2", "interested_in", "city", "province")
