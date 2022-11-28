@@ -6,13 +6,18 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.urls import reverse
 
-from .forms import OrderForm, InterestForm, LoginForm, RegisterForm
+from .forms import OrderForm, InterestForm, LoginForm, RegisterForm, ForgetPasswordForm
 from .models import Category, Product, Client, Order
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.mail import send_mail
+import random
+import string
+from django.contrib.auth.models import User
+
 
 
 # Create your views here.
@@ -116,6 +121,39 @@ def user_login(request):
     else:
         form = LoginForm()
         return render(request, 'myapp/login.html', {'form': form})
+
+def forget_password(request):
+    if request.method == 'POST':
+        form = ForgetPasswordForm(request.POST)
+        if form.is_valid():
+            email = request.POST['email']
+            userObj = User.objects.get(email = email)
+
+            if(userObj): #only send email if client exists
+                try:
+                    # create a new pw
+                    letters = string.ascii_lowercase
+                    new_password = ''.join(random.choice(letters) for i in range(8))
+
+                    send_mail(
+                        'Django App Password Reset',
+                        'Your new password is: '+new_password,
+                        'internetapplications6@gmail.com',
+                        [email],
+                        fail_silently=False,
+                    )
+                    userObj.set_password(new_password)
+                    userObj.save()
+                    msg = "A new password has been emailed to you."
+                except:
+                    msg = "There was an error sending email."
+            else:
+                msg = "No client exists with the following email address: "+email
+
+            return render(request, 'myapp/forget_password_confirmation.html', {'msg':msg})
+    else:
+        form = ForgetPasswordForm()
+    return render(request, 'myapp/forget_password_form.html', {'form': form})
 
 #Task5 added for redirecting to login page
 @login_required(login_url='/myapp/login/')

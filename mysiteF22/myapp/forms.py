@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.forms import PasswordInput, EmailInput
 from myapp.models import Order, User,Client,Category
 
@@ -40,6 +40,7 @@ class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username','password']
+        help_texts = {"username" : None, "password":None}
 
         # labels = {
         #     'username': 'Client Name',
@@ -48,6 +49,12 @@ class LoginForm(forms.ModelForm):
     # username = forms.CharField(required=True)
     # password = forms.PasswordInput(required=True)
 
+class ForgetPasswordForm(forms.Form):
+    email = forms.EmailField(required=True, label='Email')
+
+    #class Meta:
+     #   model = User
+      #  fields = ["email"]
 
 #Task 3 creating a registration form.
 class RegisterForm(UserCreationForm):
@@ -63,4 +70,4 @@ class RegisterForm(UserCreationForm):
     province = forms.ChoiceField(required=True, choices=PROVINCE_CHOICES)
     class Meta:
         model = Client
-        fields = ("username", "email", "password1", "password2", "interested_in", "city", "province")
+        fields = ("username", "first_name","last_name","email", "password1", "password2", "interested_in", "city", "province", "photo")
