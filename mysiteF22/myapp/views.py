@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 
 from .forms import OrderForm, InterestForm, LoginForm, RegisterForm, ForgetPasswordForm
@@ -195,3 +195,8 @@ def user_register(request):
     # saving registerform data to form so that it can be available for html page
     form = RegisterForm()
     return render(request=request, template_name="myapp/register.html", context={"register_form": form})
+
+
+def json_data(request):
+    data = list(Category.objects.values())
+    return JsonResponse(data,safe=False)

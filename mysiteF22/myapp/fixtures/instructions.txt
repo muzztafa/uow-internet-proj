@@ -1,0 +1,2 @@
+To save all data => Tools => Run manage.py task => dumpdata -o alldata.json
+To load data from json to db => loaddata alldata.json
