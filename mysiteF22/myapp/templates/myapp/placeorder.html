@@ -29,15 +29,22 @@
     {##}
     {#    {% endif %}#}
 
+    {% if isClient == True %}
 
-    <div class="container py-5 btn-dark">
-        <h2>Place Order</h2>
-        <form action="/myapp/placeorder/" method="POST">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button class="btn btn-dark" type="submit">Place Order</button>
-        </form>
-    </div>
+        <div class="container py-5 btn-dark">
+            <h2>Place Order</h2>
+
+            <form action="/myapp/placeorder/" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn btn-dark" type="submit">Place Order</button>
+            </form>
+
+        </div>
+
+    {% else %}
+        <strong style="color: red; text-align: center; font-size: larger">You cannot place an order since you are not a client or you are staff!</strong>
+    {% endif %}
     {#    <h2>Order Details:</h2>#}
     {#    <form action="/myapp/placeorder/" method="post">#}
     {#        {% csrf_token %}#}
