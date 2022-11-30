@@ -146,11 +146,14 @@ def forget_password(request):
                         userObj.save()
                         msg = "A new password has been emailed to you."
                     except:
-                        msg = "There was an error sending email."
+                        messages.error(request, "There was an error sending email.")
+                        return render(request, 'myapp/forget_password_form.html', {'form': form})
             except:
+                messages.error(request, "No client exists with the following email address: " + email)
+                return render(request, 'myapp/forget_password_form.html', {'form': form})
                 msg = "No client exists with the following email address: " + email
-
-            return render(request, 'myapp/forget_password_confirmation.html', {'msg': msg})
+            messages.success(request, msg)
+            return HttpResponseRedirect(reverse(('myapp:login')))
     else:
         form = ForgetPasswordForm()
     return render(request, 'myapp/forget_password_form.html', {'form': form})
