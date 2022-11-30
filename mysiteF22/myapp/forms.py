@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
-from django.forms import PasswordInput, EmailInput
+from django.forms import PasswordInput, EmailInput, BaseModelFormSet
 from myapp.models import Order, User, Client, Category
 
 
@@ -11,7 +11,9 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['client', 'product', 'num_units']
+        fields = ['client','product', 'num_units']
+        # exclude = ["client"]
+
         # widgets = {
         #     'client': forms.RadioSelect,
         # }

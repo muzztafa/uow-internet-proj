@@ -28,11 +28,6 @@ def index(request):
     last_login = request.session.get("last_login")
     return render(request, 'myapp/index.html', {'cat_list': cat_list, 'last_login': last_login})
 
-
-def about(request):
-    response = render(request, 'myapp/about.html', {"visits": request.COOKIES.get("about_visits")})
-    expiry_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
-
     if request.COOKIES.get("about_visits") != None:
         print("not none")
         curr = request.COOKIES.get("about_visits")
@@ -48,15 +43,37 @@ def detail(request, cat_no):
     category = get_object_or_404(Category, id=cat_no)
     return render(request, 'myapp/detail.html', {'productList': prod_list, 'category': category})
 
+def about(request):
+    response = render(request, 'myapp/about.html', {"visits": request.COOKIES.get("about_visits")})
+    expiry_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
+
+    if request.COOKIES.get("about_visits") != None:
+        print("not none")
+        curr = request.COOKIES.get("about_visits")
+        response.set_cookie("about_visits", int(curr) + 1, expires=expiry_time)
+    else:
+        print("none")
+        response.set_cookie("about_visits", "1", expires=expiry_time)
+    return response
+
+def detail(request, cat_no):
+    prod_list = Product.objects.filter(category=cat_no)
+    category = get_object_or_404(Category, id=cat_no)
+    return render(request, 'myapp/detail.html', {'productList': prod_list, 'category': category})
+
 
 def products(request):
     prodlist = Product.objects.all().order_by('id')[:10]
     return render(request, 'myapp/products.html', {'prodlist': prodlist})
 
 
+@login_required(login_url='/myapp/login/')
 def place_order(request):
     msg = ''
     prodlist = Product.objects.all()
+    isClient = False
+    if (request.user.is_staff == False):
+        isClient = True
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -72,7 +89,7 @@ def place_order(request):
             return render(request, 'myapp/order_response.html', {'msg': msg})
     else:
         form = OrderForm()
-    return render(request, 'myapp/placeorder.html', {'form': form, 'msg': msg, 'prodlist': prodlist})
+    return render(request, 'myapp/placeorder.html', {'form': form, 'msg': msg, 'prodlist': prodlist, 'isClient': isClient})
 
 
 @login_required(login_url='/myapp/login/')
