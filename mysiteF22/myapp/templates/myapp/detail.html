@@ -1,13 +1,11 @@
 {% extends 'myapp/base.html' %}
-{% block title %}Welcome Farhan!{% endblock %}
-{% block myhdg %}Hello Farhan {% endblock %}
-{% block body_block %}<p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+{% block body_block %}
 
     <h2>Detail Page</h2>
 
     {% if category %}
 
-        <p>Warehouse Location {{ category.warehouse }}</p>
+        <h5 style="padding: 1%">Warehouse Location: {{ category.warehouse }}</h5>
 
     {% endif %}
 
@@ -16,8 +14,19 @@
         <ol>
 
             {% for product in productList %}
+                <li>
+                    <div class="container" style="padding: 1%">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}
+                                </h5>
+                                <p>Price: ${{ product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
 
-                <li> {{ product.name }}: {{ product.price }}</li>
+                {#                <li> {{ product.name }}: {{ product.price }}</li>#}
 
             {% endfor %}
 

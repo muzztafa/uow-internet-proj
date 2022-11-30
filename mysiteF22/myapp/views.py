@@ -19,7 +19,6 @@ import string
 from django.contrib.auth.models import User
 
 
-
 # Create your views here.
 
 
@@ -47,16 +46,6 @@ def about(request):
 def detail(request, cat_no):
     prod_list = Product.objects.filter(category=cat_no)
     category = get_object_or_404(Category, id=cat_no)
-    # response = HttpResponse()
-    # print('detail')
-    # print(category)
-    # response.write('<p> Detail Page </p>')
-    # response.write('<p> Warehouse Location: '+category.warehouse+ ' </p>')
-    # for product in prod_list:
-    #     para = '<p>' + str(product.name) + ': ' + str(product.price) + '</p>'
-    #     response.write(para)
-    # return response
-    # return render(request, 'myapp/detail0.html', {'productList': prod_list, 'category': category})
     return render(request, 'myapp/detail.html', {'productList': prod_list, 'category': category})
 
 
@@ -86,6 +75,7 @@ def place_order(request):
     return render(request, 'myapp/placeorder.html', {'form': form, 'msg': msg, 'prodlist': prodlist})
 
 
+@login_required(login_url='/myapp/login/')
 def product_detail(request, prod_id):
     product = get_object_or_404(Product, id=prod_id)
     print("prod det")
@@ -101,61 +91,72 @@ def product_detail(request, prod_id):
         form = InterestForm()
     return render(request, 'myapp/product_detail.html', {'form': form, 'product': product})
 
-#Task5 added myorders redirection when logged in
+
+# Task5 added myorders redirection when logged in
 def user_login(request):
     if request.method == 'POST':
+        form = LoginForm()
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user:
             if user.is_active:
                 login(request, user)
-                logged_in_date = datetime.datetime.utcnow()
+                logged_in_date = datetime.date.today()
                 request.session['last_login'] = str(logged_in_date)
 
                 return HttpResponseRedirect(reverse('myapp:myorders'))
             else:
-                return HttpResponse('Your account is disabled.')
+                messages.error(request, "Your account has been disabled.")
+                return render(request, 'myapp/login.html', {'form': form})
         else:
-            return HttpResponse('Invalid login details.')
+            messages.error(request, "Invalid login details.")
+            return render(request, 'myapp/login.html', {'form': form})
+
+            # return render(request, 'myapp/login.html', {'form': form, 'msg': 'invalid'})
+            # return HttpResponse('Invalid login details.')
     else:
         form = LoginForm()
         return render(request, 'myapp/login.html', {'form': form})
+
 
 def forget_password(request):
     if request.method == 'POST':
         form = ForgetPasswordForm(request.POST)
         if form.is_valid():
             email = request.POST['email']
-            userObj = User.objects.get(email = email)
+            try:
+                userObj = User.objects.get(email=email)
 
-            if(userObj): #only send email if client exists
-                try:
-                    # create a new pw
-                    letters = string.ascii_lowercase
-                    new_password = ''.join(random.choice(letters) for i in range(8))
+                if (userObj):  # only send email if client exists
+                    try:
+                        # create a new pw
+                        letters = string.ascii_lowercase
+                        new_password = ''.join(random.choice(letters) for i in range(8))
 
-                    send_mail(
-                        'Django App Password Reset',
-                        'Your new password is: '+new_password,
-                        'internetapplications6@gmail.com',
-                        [email],
-                        fail_silently=False,
-                    )
-                    userObj.set_password(new_password)
-                    userObj.save()
-                    msg = "A new password has been emailed to you."
-                except:
-                    msg = "There was an error sending email."
-            else:
-                msg = "No client exists with the following email address: "+email
+                        print(new_password)
+                        send_mail(
+                            'Django App Password Reset',
+                            'Your new password is: ' + new_password,
+                            'internetapplications9@gmail.com',
+                            [email],
+                            fail_silently=False,
+                        )
+                        userObj.set_password(new_password)
+                        userObj.save()
+                        msg = "A new password has been emailed to you."
+                    except:
+                        msg = "There was an error sending email."
+            except:
+                msg = "No client exists with the following email address: " + email
 
-            return render(request, 'myapp/forget_password_confirmation.html', {'msg':msg})
+            return render(request, 'myapp/forget_password_confirmation.html', {'msg': msg})
     else:
         form = ForgetPasswordForm()
     return render(request, 'myapp/forget_password_form.html', {'form': form})
 
-#Task5 added for redirecting to login page
+
+# Task5 added for redirecting to login page
 @login_required(login_url='/myapp/login/')
 def myorders(request):
     loggedInUser = request.user.get_username()
@@ -168,6 +169,7 @@ def myorders(request):
     else:
         isClient = False
     return render(request, 'myapp/myorders.html', {"isClient": isClient, "orderList": orders})
+
 
 @login_required
 def user_logout(request):
@@ -191,12 +193,12 @@ def user_register(request):
 
         # returning error message
         messages.error(request, "Invalid information, Registration failed.")
-
-    # saving registerform data to form so that it can be available for html page
-    form = RegisterForm()
+    else:
+        # saving registerform data to form so that it can be available for html page
+        form = RegisterForm()
     return render(request=request, template_name="myapp/register.html", context={"register_form": form})
 
 
 def json_data(request):
     data = list(Category.objects.values())
-    return JsonResponse(data,safe=False)
+    return JsonResponse(data, safe=False)

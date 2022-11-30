@@ -1,21 +1,20 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.forms import PasswordInput, EmailInput
-from myapp.models import Order, User,Client,Category
+from myapp.models import Order, User, Client, Category
 
 
 class OrderForm(forms.ModelForm):
-
     # client=forms.ModelChoiceField(label='Client Name', widget=forms.RadioSelect)
     # product=forms.ModelChoiceField()
     # num_units=forms.IntegerField(label='Quantity')
 
     class Meta:
         model = Order
-        fields = ['client','product','num_units']
-        widgets = {
-            'client': forms.RadioSelect,
-        }
+        fields = ['client', 'product', 'num_units']
+        # widgets = {
+        #     'client': forms.RadioSelect,
+        # }
         labels = {
             'client': 'Client Name',
             'num_units': 'Quantity'
@@ -26,7 +25,6 @@ class OrderForm(forms.ModelForm):
 
 
 class InterestForm(forms.Form):
-
     CHOICES_INT = (
         ("1", "Yes"),
         ("0", "No"),
@@ -36,11 +34,13 @@ class InterestForm(forms.Form):
     quantity = forms.IntegerField(min_value=1, initial=1)
     comments = forms.CharField(widget=forms.Textarea, required=False, label='Additional Comments')
 
+
 class LoginForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username','password']
-        help_texts = {"username" : None, "password":None}
+        fields = ['username', 'password']
+        widgets = {'password': forms.PasswordInput}
+        help_texts = {"username": None, "password": None}
 
         # labels = {
         #     'username': 'Client Name',
@@ -49,14 +49,16 @@ class LoginForm(forms.ModelForm):
     # username = forms.CharField(required=True)
     # password = forms.PasswordInput(required=True)
 
+
 class ForgetPasswordForm(forms.Form):
     email = forms.EmailField(required=True, label='Email')
 
-    #class Meta:
-     #   model = User
-      #  fields = ["email"]
+    # class Meta:
+    #   model = User
+    #  fields = ["email"]
 
-#Task 3 creating a registration form.
+
+# Task 3 creating a registration form.
 class RegisterForm(UserCreationForm):
     PROVINCE_CHOICES = [
         ('AB', 'Alberta'),
@@ -68,6 +70,10 @@ class RegisterForm(UserCreationForm):
     interested_in = forms.ModelMultipleChoiceField(required=True, queryset=Category.objects.all())
     city = forms.CharField(required=True)
     province = forms.ChoiceField(required=True, choices=PROVINCE_CHOICES)
+
     class Meta:
         model = Client
-        fields = ("username", "first_name","last_name","email", "password1", "password2", "interested_in", "city", "province", "photo")
+        fields = (
+            "username", "first_name", "last_name", "email", "password1", "password2", "interested_in", "city",
+            "province",
+            "photo")

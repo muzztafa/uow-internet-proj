@@ -1,41 +1,49 @@
+<head>
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
 {% extends 'myapp/base.html' %}
-{% block title %}Welcome Farhan!{% endblock %}
-{% block myhdg %}Hello Farhan {% endblock %}
-{% block body_block %}<p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+{% block body_block %}
+    {% load crispy_forms_tags %}
 
 
-    <h2>Place Order</h2>
-
-    {% if prodlist %}
-
-        <ol>
-
-            {% for product in prodlist %}
-
-                <li> {{ product.name }}: ${{ product.price }} - In Stock: {{ product.stock }}</li>
-
-            {% endfor %}
-
-        </ol>
-
-    {% else %}
-
-        <strong>There are no available products!</strong>
-
-    {% endif %}
-
-
-{#    {{ form.as_p }}#}
-
-    <form action="/myapp/placeorder/" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit" />
-    </form>
+    {#    <h2 class="text-center">Place Order</h2>#}
+    {##}
+    {#    {% if prodlist %}#}
+    {#        <h2>Available Products:</h2>#}
+    {##}
+    {#        <ol>#}
+    {##}
+    {#            {% for product in prodlist %}#}
+    {##}
+    {#                <li> {{ product.name }}: ${{ product.price }} - In Stock: {{ product.stock }}</li>#}
+    {##}
+    {#            {% endfor %}#}
+    {##}
+    {#        </ol>#}
+    {##}
+    {#    {% else %}#}
+    {##}
+    {#        <strong>There are no available products!</strong>#}
+    {##}
+    {#    {% endif %}#}
 
 
-    <p><a href="{% url 'myapp:index' %}">Go Back</a></p>
-
+    <div class="container py-5 btn-dark">
+        <h2>Place Order</h2>
+        <form action="/myapp/placeorder/" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-dark" type="submit">Place Order</button>
+        </form>
+    </div>
+    {#    <h2>Order Details:</h2>#}
+    {#    <form action="/myapp/placeorder/" method="post">#}
+    {#        {% csrf_token %}#}
+    {#        {{ form }}#}
+    {#        <input class="btn-primary" type="submit" value="Place Order"/>#}
+    {#    </form>#}
 {% endblock %}
 
 

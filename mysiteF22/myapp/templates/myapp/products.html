@@ -1,28 +1,51 @@
 {% extends 'myapp/base.html' %}
-{% block title %}Welcome Farhan!{% endblock %}
-{% block myhdg %}Hello Farhan {% endblock %}
-{% block body_block %}<p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+
+{% block body_block %}
+
+    <div class="container">
+        <div class="row">
+            <h2 class="col">Products:</h2>
+            <a class="flex-column-reverse" href="{% url 'myapp:placeorder' %}">
+                <button class='btn btn-dark'>Place Order</button>
+            </a>
+        </div>
 
 
-    <h2>Product Page</h2>
 
-    {% if prodlist %}
+        {% if prodlist %}
 
-        <ol>
+            <ol>
 
-            {% for product in prodlist %}
-                <a href="{% url 'myapp:product_detail' product.id %}"><li>{{ product.name }}: ${{ product.price }} - In Stock: {{ product.stock }}</li></a>
+                {% for product in prodlist %}
+                    <div class="container" style="padding: 1%">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}
+                                </h5>
+                                <p>Price: {{ product.price }}</p>
+                                <p>Stock Available: {{ product.stock }}</p>
+                                <a href="{% url 'myapp:product_detail' product.id %}">
+                                    <button class='btn btn-dark'>View More</button>
+                                </a>
+                            </div>
 
-            {% endfor %}
+                        </div>
+                    </div>
+                    {#                <a href="{% url 'myapp:product_detail' product.id %}">#}
+                    {#                    <li>{{ product.name }}: ${{ product.price }} - In Stock: {{ product.stock }}</li>#}
+                    {#                </a>#}
 
-        </ol>
+                {% endfor %}
 
-    {% else %}
+            </ol>
 
-        <strong>There are no available products!</strong>
+        {% else %}
 
-    {% endif %}
+            <strong>There are no available products!</strong>
 
-    <p><a href="{% url 'myapp:placeorder' %}">Place Order</a></p>
+        {% endif %}
+
+
+
 
 {% endblock %}

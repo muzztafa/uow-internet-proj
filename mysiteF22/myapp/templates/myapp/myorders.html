@@ -1,22 +1,40 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
 {% extends 'myapp/base.html' %}
-{% block body_block %}<p><a href="{% url 'myapp:index' %}">Go Back</a></p>
+{% block body_block %}
 
 
     <h2>My Orders</h2>
 
     {% if isClient == True %}
 
-           {% if orderList %}
+        {% if orderList %}
 
             <ol>
 
                 {% for order in orderList %}
-                   <li>
-                       <p>Product: {{ order.product }}</p>
-                    <p>Client: {{ order.client }}</p>
-                    <p>Ordered Quantity: {{ order.num_units }}</p>
-                    <p>Status: {{ order.order_status }}</p>
-                    <p>Date: {{ order.status_date }}</p>
+                    <li>
+                        <div class="container" style="padding: 1%">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ order.product }}
+                                    </h5>
+                                    <p>Client: {{ order.client }}</p>
+                                    <p>Ordered Quantity: {{ order.num_units }}</p>
+                                    <p>Status: {{ order.order_status }}</p>
+                                    <p>Date: {{ order.status_date }}</p>
+                                </div>
+
+                            </div>
+                        </div>
+                        {#                        <p>Product: {{ order.product }}</p>#}
+                        {#                        <p>Client: {{ order.client }}</p>#}
+                        {#                        <p>Ordered Quantity: {{ order.num_units }}</p>#}
+                        {#                        <p>Status: {{ order.order_status }}</p>#}
+                        {#                        <p>Date: {{ order.status_date }}</p>#}
                     </li>
 
                 {% endfor %}

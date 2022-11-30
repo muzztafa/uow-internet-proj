@@ -7,8 +7,23 @@
         <ol>
 
             {% for cat in cat_list %}
+                <div class="container" style="padding: 1%">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cat.name }}
+                            </h5>
 
-                <a href="{% url 'myapp:detail' cat.id %}"><li>{{ cat.name }}</li></a>
+                            <a href="{% url 'myapp:detail' cat.id %}">
+                                <button class='btn btn-dark'>View More</button>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                {#                <a href="{% url 'myapp:detail' cat.id %}">#}
+                {#                    <li>{{ cat.name }}</li>#}
+                {#                </a>#}
 
             {% endfor %}
 
@@ -21,15 +36,17 @@
     {% endif %}
 
     {% if last_login %}
-        <strong>Last Login: {{ last_login }}</strong>
-        {% else %}
-        <strong>Your last login was more than a hour ago!</strong>
+        <hr/>
+        <strong>
+            Last Login: {{ last_login }}
+        </strong>
+    {% else %}
+        <hr/>
+        <strong>Your last login was more than an hour ago!</strong>
     {% endif %}
 
 
     {#    <p><a href="/myapp/about">About Page (hardcoded)</a></p>#}
-
-    <p><a href="{% url 'myapp:about' %}">About Page</a></p>
 
 
 {% endblock %}
